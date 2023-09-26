@@ -37,11 +37,17 @@ class RunningState implements KronoState
 
     public function cancel(): void
     {
-        $this->krono->setState(new InitialState($this->krono));
+        $this->krono->setState(new WaitingState($this->krono));
     }
 
     public function elapsedTime(): float
     {
         return 0;
     }
+
+    public function word(): string
+    {
+        return 'running';
+    }
+
 }

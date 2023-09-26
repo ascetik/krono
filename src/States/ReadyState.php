@@ -37,11 +37,18 @@ class ReadyState implements KronoState
 
     public function cancel(): void
     {
-        $this->krono->setState(new InitialState($this->krono));
+        $this->krono->setState(new WaitingState($this->krono));
     }
 
     public function elapsedTime(): float
     {
         return $this->stopTime - $this->startTime;
     }
+
+
+    public function word(): string
+    {
+        return 'ready';
+    }
+
 }
