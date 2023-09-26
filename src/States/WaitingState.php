@@ -6,7 +6,7 @@ use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\Krono;
 use Ascetik\Krono\Types\KronoState;
 
-class InitialState implements KronoState
+class WaitingState implements KronoState
 {
     public function __construct(protected Krono $krono)
     {
@@ -37,5 +37,10 @@ class InitialState implements KronoState
     public function elapsedTime(): float
     {
         return 0;
+    }
+
+    public function word(): string
+    {
+        return 'waiting';
     }
 }
