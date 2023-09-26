@@ -2,7 +2,7 @@
 
 namespace Ascetik\Krono\Types;
 
-interface KronoState
+interface KronoState extends Counter
 {
     //
 }

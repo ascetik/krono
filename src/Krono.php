@@ -3,33 +3,63 @@
 namespace Ascetik\Krono;
 
 use Ascetik\Krono\Exceptions\KronoException;
+use Ascetik\Krono\States\InitialState;
+use Ascetik\Krono\Types\Counter;
+use Ascetik\Krono\Types\KronoState;
 use Ascetik\UnitscaleTime\Factories\TimeScaler;
 
-class Krono
+class Krono implements Counter
 {
     private float $start = 0;
     private float $stop = 0;
-    private bool $isConsumed = false;
     private bool $isRunning = false;
+    private KronoState $state;
 
-    public function start()
+    public function __construct()
     {
-        if ($this->isRunning) {
-            throw new KronoException('already running');
-        }
-        $this->start = hrtime();
-        $this->isRunning = true;
-        return $this->start;
+        $this->state = new InitialState($this);
     }
 
-    public function stop()
+    public function setState(KronoState $state)
     {
-        if (!$this->isRunning) {
-            throw new KronoException('not started');
-        }
-        $this->stop = hrtime();
-        $this->isRunning = false;
-        return $this->stop;
+        $this->state = $state;
+    }
+
+    public function start(): float
+    {
+        return $this->state->start();
+        // if ($this->isRunning) {
+        //     throw new KronoException('already running');
+        // }
+        // $this->start = hrtime();
+        // $this->isRunning = true;
+        // return $this->start;
+    }
+
+    public function stop(): float
+    {
+        return $this->state->stop();
+        // if (!$this->isRunning) {
+        //     throw new KronoException('not started');
+        // }
+        // $this->stop = hrtime();
+        // $this->isRunning = false;
+        // return $this->stop;
+    }
+
+    public function cancel(): void
+    {
+        $this->state->cancel();
+        // $this->start = 0;
+        // $this->stop = 0;
+        // $this->isRunning = false;
+    }
+
+    public function reset(): float
+    {
+        return $this->state->reset();
+        // $this->cancel();
+        // return $this->start();
     }
 
     public function elapsedTime(): float
