@@ -39,4 +39,9 @@ class RunningState implements KronoState
     {
         $this->krono->setState(new InitialState($this->krono));
     }
+
+    public function elapsedTime(): float
+    {
+        return 0;
+    }
 }

@@ -33,4 +33,9 @@ class InitialState implements KronoState
     public function cancel(): void
     {
     }
+
+    public function elapsedTime(): float
+    {
+        return 0;
+    }
 }

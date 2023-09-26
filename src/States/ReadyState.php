@@ -9,14 +9,13 @@ use Ascetik\Krono\Types\KronoState;
 class ReadyState implements KronoState
 {
     public readonly float $stopTime;
-    
+
     public function __construct(
         protected Krono $krono,
         private float $startTime,
-        
+
     ) {
         $this->stopTime = hrtime(true);
-
     }
     public function start(): float
     {
@@ -35,9 +34,14 @@ class ReadyState implements KronoState
         $this->cancel();
         return 0;
     }
-    
+
     public function cancel(): void
     {
         $this->krono->setState(new InitialState($this->krono));
+    }
+
+    public function elapsedTime(): float
+    {
+        return $this->stopTime - $this->startTime;
     }
 }

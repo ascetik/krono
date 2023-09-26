@@ -8,4 +8,5 @@ interface Counter
     public function stop(): float;
     public function reset(): float;
     public function cancel(): void;
+    public function elapsedTime(): float;
 }

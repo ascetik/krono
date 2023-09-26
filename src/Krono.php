@@ -10,9 +10,6 @@ use Ascetik\UnitscaleTime\Factories\TimeScaler;
 
 class Krono implements Counter
 {
-    private float $start = 0;
-    private float $stop = 0;
-    private bool $isRunning = false;
     private KronoState $state;
 
     public function __construct()
@@ -28,43 +25,26 @@ class Krono implements Counter
     public function start(): float
     {
         return $this->state->start();
-        // if ($this->isRunning) {
-        //     throw new KronoException('already running');
-        // }
-        // $this->start = hrtime();
-        // $this->isRunning = true;
-        // return $this->start;
     }
 
     public function stop(): float
     {
         return $this->state->stop();
-        // if (!$this->isRunning) {
-        //     throw new KronoException('not started');
-        // }
-        // $this->stop = hrtime();
-        // $this->isRunning = false;
-        // return $this->stop;
     }
 
     public function cancel(): void
     {
         $this->state->cancel();
-        // $this->start = 0;
-        // $this->stop = 0;
-        // $this->isRunning = false;
     }
 
     public function reset(): float
     {
         return $this->state->reset();
-        // $this->cancel();
-        // return $this->start();
     }
 
     public function elapsedTime(): float
     {
-        return $this->stop - $this->start;
+        return $this->state->elapsedTime();
     }
 
     public function __toString()
