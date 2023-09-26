@@ -8,6 +8,7 @@
 >
     <testsuites>
         <testsuite name="Unit Scale">
+            <file>./tests/KronoTest.php</file>
         </testsuite>
     </testsuites>
     <php>
