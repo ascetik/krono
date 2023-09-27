@@ -32,10 +32,10 @@ class KronoWaitingTest extends TestCase
         $this->krono->stop();
     }
 
-    public function testShouldNotBeAbleToReset()
+    public function testShouldNotBeAbleTorestart()
     {
         $this->expectException(KronoException::class);
-        $this->krono->reset();
+        $this->krono->restart();
     }
 
     public function testShouldNotBeAbleToCancel()

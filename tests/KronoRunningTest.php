@@ -38,11 +38,11 @@ class KronoRunningTest extends TestCase
         $this->assertSame('waiting', $this->krono->state());
     }
 
-    public function testStartedKronoShouldBeAbleToReset()
+    public function testStartedKronoShouldBeAbleTorestart()
     {
         $this->krono->cancel();
         $startpoint = $this->krono->start();
-        $restartpoint = $this->krono->reset();
+        $restartpoint = $this->krono->restart();
         $this->assertTrue($restartpoint > $startpoint);
     }
 
