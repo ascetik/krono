@@ -8,30 +8,31 @@ use Ascetik\Krono\Types\KronoState;
 
 class WaitingState implements KronoState
 {
+    public const WORDING = 'waiting';
+
     public function __construct(protected Krono $krono)
     {
     }
     public function start(): float
     {
-        $state = new RunningState($this->krono);
+        $state = new RunningState($this->krono, hrtime(true));
         $this->krono->setState($state);
         return $state->startValue;
     }
 
     public function stop(): float
     {
-        throw new KronoException('not running');
-        return 0;
+        $this->throw();
     }
 
     public function reset(): float
     {
-        throw new KronoException('not running');
-        return 0;
+        $this->throw();
     }
 
     public function cancel(): void
     {
+        $this->throw();
     }
 
     public function elapsedTime(): float
@@ -39,8 +40,13 @@ class WaitingState implements KronoState
         return 0;
     }
 
-    public function word(): string
+    // public function wording(): string
+    // {
+    //     return 'wait';
+    // }
+
+    private function throw()
     {
-        return 'waiting';
+        throw new KronoException('not running');
     }
 }
