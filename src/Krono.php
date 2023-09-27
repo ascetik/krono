@@ -2,7 +2,6 @@
 
 namespace Ascetik\Krono;
 
-use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\States\WaitingState;
 use Ascetik\Krono\Types\Counter;
 use Ascetik\Krono\Types\KronoState;
@@ -14,7 +13,7 @@ class Krono implements Counter
 
     public function __construct()
     {
-        $this->state = new WaitingState($this);
+        $this->reset();
     }
 
     public function setState(KronoState $state):self
@@ -38,9 +37,14 @@ class Krono implements Counter
         $this->state->cancel();
     }
 
-    public function reset(): float
+    public function restart(): float
     {
-        return $this->state->reset();
+        return $this->state->restart();
+    }
+
+    public function reset()
+    {
+        $this->state = new WaitingState($this);
     }
 
     public function elapsedTime(): float
@@ -72,7 +76,7 @@ class Krono implements Counter
      * Si j'ai fait restart, je réinitialise mes valeurs et je rappelle start()
      * si j'ai fait cancel(), je reprends l'état du début
      * WaitingState
-     * ensuite je fais stop(). là je peux faire reset() ou obtenir mon résultat, float ou string. Je ne peux pas cancel()
+     * ensuite je fais stop(). là je peux faire restart() ou obtenir mon résultat, float ou string. Je ne peux pas cancel()
      * ReadyState
      *
      */
