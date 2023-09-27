@@ -7,7 +7,7 @@ use Ascetik\Krono\States\RunningState;
 
 trait UseRunningState
 {
-    private function run(Krono $krono): float
+    private function setRunningState(Krono $krono): float
     {
         $state = new RunningState($krono);
         $krono->setState($state);
