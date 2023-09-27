@@ -17,9 +17,10 @@ class Krono implements Counter
         $this->state = new WaitingState($this);
     }
 
-    public function setState(KronoState $state)
+    public function setState(KronoState $state):self
     {
         $this->state = $state;
+        return $this;
     }
 
     public function start(): float
@@ -56,7 +57,7 @@ class Krono implements Counter
 
     public function state():string
     {
-        return $this->state->word();
+        return $this->state::WORDING;
     }
     /**
      * J'ai un chrono pas encore lancé.
