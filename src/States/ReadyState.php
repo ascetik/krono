@@ -4,41 +4,43 @@ namespace Ascetik\Krono\States;
 
 use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\Krono;
+use Ascetik\Krono\Traits\UseRunningState;
 use Ascetik\Krono\Types\KronoState;
 
 class ReadyState implements KronoState
 {
+    use UseRunningState;
+
     public const WORDING = 'ready';
     
+    public readonly float $stopTime;
+
     public function __construct(
         protected Krono $krono,
         private float $startTime,
-        public readonly float $stopTime
 
     ) {
+        $this->stopTime = hrtime(true);
     }
     
     public function start(): float
     {
-        throw new KronoException('already running');
-        return 0;
+        return $this->run($this->krono);
     }
 
     public function stop(): float
     {
-        throw new KronoException('not running');
-        return 0;
+        return $this->stopTime;
     }
 
-    public function reset(): float
+    public function restart(): float
     {
-        $this->cancel();
-        return $this->krono->reset();
+        return $this->start();
     }
 
     public function cancel(): void
     {
-        $this->krono->setState(new WaitingState($this->krono));
+        $this->krono->reset();
     }
 
     public function elapsedTime(): float

@@ -4,20 +4,25 @@ namespace Ascetik\Krono\States;
 
 use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\Krono;
+use Ascetik\Krono\Traits\UseRunningState;
 use Ascetik\Krono\Types\KronoState;
 
 class WaitingState implements KronoState
 {
+    use UseRunningState;
+
     public const WORDING = 'waiting';
 
     public function __construct(protected Krono $krono)
     {
     }
+    
     public function start(): float
     {
-        $state = new RunningState($this->krono, hrtime(true));
-        $this->krono->setState($state);
-        return $state->startValue;
+        return $this->run($this->krono);
+        // $state = new RunningState($this->krono);
+        // $this->krono->setState($state);
+        // return $state->startValue;
     }
 
     public function stop(): float
@@ -25,7 +30,7 @@ class WaitingState implements KronoState
         $this->throw();
     }
 
-    public function reset(): float
+    public function restart(): float
     {
         $this->throw();
     }
