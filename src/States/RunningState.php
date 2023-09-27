@@ -8,11 +8,13 @@ use Ascetik\Krono\Types\KronoState;
 
 class RunningState implements KronoState
 {
-    public readonly float $startValue;
+    public const WORDING = 'running';
 
-    public function __construct(protected Krono $krono)
-    {
-        $this->startValue = hrtime(true);
+
+    public function __construct(
+        protected Krono $krono,
+        public readonly float $startValue
+    ) {
     }
 
     public function start(): float
@@ -23,14 +25,14 @@ class RunningState implements KronoState
 
     public function stop(): float
     {
-        $state = new ReadyState($this->krono, $this->startValue);
+        $state = new ReadyState($this->krono, $this->startValue, hrtime(true));
         $this->krono->setState($state);
         return $state->stopTime;
     }
 
     public function reset(): float
     {
-        $state = new self($this->krono);
+        $state = new self($this->krono, hrtime(true));
         $this->krono->setState($state);
         return $state->startValue;
     }
@@ -42,12 +44,7 @@ class RunningState implements KronoState
 
     public function elapsedTime(): float
     {
-        return 0;
+        $this->stop();
+        return $this->krono->elapsedTime();
     }
-
-    public function word(): string
-    {
-        return 'running';
-    }
-
 }
