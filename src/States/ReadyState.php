@@ -8,15 +8,16 @@ use Ascetik\Krono\Types\KronoState;
 
 class ReadyState implements KronoState
 {
-    public readonly float $stopTime;
-
+    public const WORDING = 'ready';
+    
     public function __construct(
         protected Krono $krono,
         private float $startTime,
+        public readonly float $stopTime
 
     ) {
-        $this->stopTime = hrtime(true);
     }
+    
     public function start(): float
     {
         throw new KronoException('already running');
@@ -32,7 +33,7 @@ class ReadyState implements KronoState
     public function reset(): float
     {
         $this->cancel();
-        return 0;
+        return $this->krono->reset();
     }
 
     public function cancel(): void
@@ -44,11 +45,4 @@ class ReadyState implements KronoState
     {
         return $this->stopTime - $this->startTime;
     }
-
-
-    public function word(): string
-    {
-        return 'ready';
-    }
-
 }
