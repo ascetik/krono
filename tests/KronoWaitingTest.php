@@ -22,7 +22,6 @@ class KronoWaitingTest extends TestCase
 
     public function testShouldBeAbleToStart()
     {
-        echo $this->krono->state();
         $this->assertIsFloat($this->krono->start());
     }
 

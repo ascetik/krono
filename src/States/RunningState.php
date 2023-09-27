@@ -2,7 +2,6 @@
 
 namespace Ascetik\Krono\States;
 
-use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\Krono;
 use Ascetik\Krono\Traits\UseRunningState;
 use Ascetik\Krono\Types\KronoState;
@@ -23,8 +22,7 @@ class RunningState implements KronoState
 
     public function start(): float
     {
-        throw new KronoException('already running');
-        return 0;
+        return $this->startValue;
     }
 
     public function stop(): float

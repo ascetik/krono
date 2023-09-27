@@ -21,10 +21,10 @@ class KronoRunningTest extends TestCase
         $this->assertSame('running',$this->krono->state());
     }
 
-    public function testStartedKronoWontBeAbleToStartAgain()
+    public function testStartedKronoWontBeAffectedOnStartAgain()
     {
-        $this->expectException(KronoException::class);
-        $this->krono->start();
+        $this->assertIsFloat($this->krono->start());
+        $this->assertSame('running', $this->krono->state());
     }
 
     public function testStartedKronoShouldBeAbleToStop()

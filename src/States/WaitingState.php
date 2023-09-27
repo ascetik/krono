@@ -16,13 +16,10 @@ class WaitingState implements KronoState
     public function __construct(protected Krono $krono)
     {
     }
-    
+
     public function start(): float
     {
         return $this->run($this->krono);
-        // $state = new RunningState($this->krono);
-        // $this->krono->setState($state);
-        // return $state->startValue;
     }
 
     public function stop(): float
@@ -44,11 +41,6 @@ class WaitingState implements KronoState
     {
         return 0;
     }
-
-    // public function wording(): string
-    // {
-    //     return 'wait';
-    // }
 
     private function throw()
     {

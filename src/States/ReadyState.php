@@ -2,7 +2,6 @@
 
 namespace Ascetik\Krono\States;
 
-use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\Krono;
 use Ascetik\Krono\Traits\UseRunningState;
 use Ascetik\Krono\Types\KronoState;
