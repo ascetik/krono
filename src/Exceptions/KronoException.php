@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is part of the UnitScale package.
+ * This is part of the Krono package.
  *
- * @package    unitscale-core
+ * @package    krono
  * @category   Exception
  * @license    https://opensource.org/license/mit/  MIT License
  * @copyright  Copyright (c) 2023, Vidda
