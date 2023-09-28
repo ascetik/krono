@@ -102,4 +102,10 @@ class Krono implements Counter
     {
         return Clock::systemResolution();
     }
+
+    public function round(int $precision):self
+    {
+        $this->precision = $precision;
+        return $this;
+    }
 }
