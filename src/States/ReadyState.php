@@ -68,6 +68,7 @@ class ReadyState implements KronoState
      */
     public function elapsedTime(): float
     {
-        return $this->stopTime - $this->startTime;
+        $time =  $this->stopTime - $this->startTime;
+        return $this->krono->clock->toSeconds($time);
     }
 }
