@@ -20,6 +20,7 @@ use Ascetik\Krono\Types\Counter;
 use Ascetik\Krono\Types\Klock;
 use Ascetik\Krono\Types\KronoState;
 use Ascetik\UnitscaleTime\Factories\TimeScaler;
+use Ascetik\UnitscaleTime\Scales\TimeScale;
 
 /**
  * Krono is a simple time counter.
@@ -41,9 +42,10 @@ class Krono implements Counter
 {
     private KronoState $state;
     private int $precision = 9;
+    private bool $adjust = false;
 
     public function __construct(
-        private Klock $clock = new HighResolutionKlock()
+        public readonly Klock $clock = new HighResolutionKlock()
     ) {
         $this->reset();
     }
@@ -84,11 +86,18 @@ class Krono implements Counter
         return $this->state->elapsedTime();
     }
 
+    public function adjusted(): self
+    {
+        $this->adjust = true;
+        return $this;
+    }
     public function __toString()
     {
-        $time = $this->elapsedTime();
-        $seconds = $this->clock->toSeconds($time);
-        return (string) TimeScaler::adjust(round($seconds, $this->precision));
+        $time = round($this->elapsedTime(), $this->precision);
+        $scaleMethod = $this->adjust
+            ? 'adjust'
+            : 'unit';
+        return (string) call_user_func([TimeScaler::class, $scaleMethod], $time);
     }
 
     public function state(): string
