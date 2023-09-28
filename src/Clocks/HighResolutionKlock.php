@@ -10,12 +10,13 @@
  * @author     Vidda <vidda@ascetik.fr>
  */
 
- declare(strict_types=1);
+declare(strict_types=1);
 
 namespace Ascetik\Krono\Clocks;
 
 use Ascetik\Krono\Types\Klock;
 use Ascetik\UnitscaleTime\Factories\TimeScaler;
+use Ascetik\UnitscaleTime\Values\TimeScaleValue;
 
 /**
  * Use System high resolution time
@@ -29,9 +30,14 @@ class HighResolutionKlock implements Klock
         return hrtime(true);
     }
 
+    public function unit(float $time): TimeScaleValue
+    {
+        return TimeScaler::unit($time);
+    }
+
     public function toSeconds(float $time): int|float
     {
-        return TimeScaler::unit($time)
+        return $this->unit($time)
             ->fromNano()
             ->toSeconds()
             ->raw();
