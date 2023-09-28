@@ -83,7 +83,10 @@ class Krono implements Counter
     public function __toString()
     {
         $time = $this->elapsedTime();
-        $unit = TimeScaler::unit($time);
+        $seconds = TimeScaler::unit($time)
+            ->fromNano()
+            ->toSeconds();
+        $unit = TimeScaler::adjust(round($seconds->raw(), 3));
         return (string) $unit;
     }
 
