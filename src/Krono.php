@@ -14,9 +14,10 @@ declare(strict_types=1);
 
 namespace Ascetik\Krono;
 
+use Ascetik\Krono\Clocks\HighResolutionKlock;
 use Ascetik\Krono\States\WaitingState;
-use Ascetik\Krono\Tools\Clock;
 use Ascetik\Krono\Types\Counter;
+use Ascetik\Krono\Types\Klock;
 use Ascetik\Krono\Types\KronoState;
 use Ascetik\UnitscaleTime\Factories\TimeScaler;
 
@@ -42,7 +43,9 @@ class Krono implements Counter
 
     private int $precision = 9;
 
-    public function __construct()
+    public function __construct(
+        private Klock $clock = new HighResolutionKlock()
+    )
     {
         $this->reset();
     }
@@ -86,11 +89,8 @@ class Krono implements Counter
     public function __toString()
     {
         $time = $this->elapsedTime();
-        $seconds = TimeScaler::unit($time)
-            ->fromNano()
-            ->toSeconds();
-        $unit = TimeScaler::adjust(round($seconds->raw(), $this->precision, PHP_ROUND_HALF_DOWN));
-        return (string) $unit;
+        $seconds = $this->clock->toSeconds($time);
+        return (string) TimeScaler::adjust(round($seconds,$this->precision));
     }
 
     public function state(): string
@@ -100,7 +100,7 @@ class Krono implements Counter
 
     public function now()
     {
-        return Clock::systemResolution();
+        return $this->clock->now();
     }
 
     public function round(int $precision):self
