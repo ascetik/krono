@@ -29,12 +29,11 @@ class RunningState implements KronoState
 
     public const WORDING = 'running';
 
-    public readonly float $startValue;
 
     public function __construct(
         protected Krono $krono,
+        public readonly float $startValue
     ) {
-        $this->startValue = hrtime(true);
     }
 
     /**
@@ -50,7 +49,7 @@ class RunningState implements KronoState
      */
     public function stop(): float
     {
-        $state = new ReadyState($this->krono, $this->startValue);
+        $state = new ReadyState($this->krono, $this->startValue, $this->krono->now());
         $this->krono->setState($state);
         return $state->stopTime;
     }

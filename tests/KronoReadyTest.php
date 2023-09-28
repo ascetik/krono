@@ -5,19 +5,21 @@ declare(strict_types=1);
 namespace Ascetik\Krono\Tests;
 
 use Ascetik\Krono\Krono;
+use Ascetik\Krono\States\ReadyState;
 use PHPUnit\Framework\TestCase;
 
 class KronoReadyTest extends TestCase
 {
     private Krono $krono;
-    private float $start = 0;
-    private float $stop = 0;
+    private float $start = 1000000;
+    private float $stop = 2800000;
 
     protected function setUp(): void
     {
+
         $this->krono = new Krono();
-        $this->start = $this->krono->start();
-        $this->stop = $this->krono->stop();
+        $state = new ReadyState($this->krono, $this->start, $this->stop);
+        $this->krono->setState($state);
     }
 
     public function testKronoShouldBeReady()
@@ -54,6 +56,11 @@ class KronoReadyTest extends TestCase
     public function testElapsedTimeShouldBeFloat()
     {
         $this->assertIsFloat($this->krono->elapsedTime());
+        $this->assertEquals($this->stop - $this->start, $this->krono->elapsedTime());
     }
 
+    public function testKronoStringOutput()
+    {
+        $this->assertSame('1ms 800μs', (string) $this->krono);
+    }
 }
