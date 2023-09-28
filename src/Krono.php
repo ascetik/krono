@@ -40,13 +40,11 @@ use Ascetik\UnitscaleTime\Factories\TimeScaler;
 class Krono implements Counter
 {
     private KronoState $state;
-
     private int $precision = 9;
 
     public function __construct(
         private Klock $clock = new HighResolutionKlock()
-    )
-    {
+    ) {
         $this->reset();
     }
 
@@ -90,7 +88,7 @@ class Krono implements Counter
     {
         $time = $this->elapsedTime();
         $seconds = $this->clock->toSeconds($time);
-        return (string) TimeScaler::adjust(round($seconds,$this->precision));
+        return (string) TimeScaler::adjust(round($seconds, $this->precision));
     }
 
     public function state(): string
@@ -103,7 +101,7 @@ class Krono implements Counter
         return $this->clock->now();
     }
 
-    public function round(int $precision):self
+    public function round(int $precision): self
     {
         $this->precision = $precision;
         return $this;
