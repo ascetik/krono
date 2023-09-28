@@ -56,11 +56,22 @@ class KronoReadyTest extends TestCase
     public function testElapsedTimeShouldBeFloat()
     {
         $this->assertIsFloat($this->krono->elapsedTime());
-        $this->assertEquals($this->stop - $this->start, $this->krono->elapsedTime());
+        $this->assertEquals(
+            round(($this->stop - $this->start) * pow(10, -9),6),
+            $this->krono->elapsedTime()
+        );
     }
 
     public function testKronoStringOutput()
     {
-        $this->assertSame('1ms 800μs', (string) $this->krono);
+        echo $this->krono.PHP_EOL;
+        $this->assertSame('0.0018s', (string) $this->krono);
     }
+
+    public function testKronoStringAdjustedOutput()
+    {
+        echo $this->krono.PHP_EOL;
+        $this->assertSame('1ms 800μs', (string) $this->krono->adjusted());
+    }
+
 }
