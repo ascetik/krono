@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Ascetik\Krono;
 
 use Ascetik\Krono\States\WaitingState;
+use Ascetik\Krono\Tools\Clock;
 use Ascetik\Krono\Types\Counter;
 use Ascetik\Krono\Types\KronoState;
 use Ascetik\UnitscaleTime\Factories\TimeScaler;
@@ -38,6 +39,8 @@ use Ascetik\UnitscaleTime\Factories\TimeScaler;
 class Krono implements Counter
 {
     private KronoState $state;
+
+    private int $precision = 9;
 
     public function __construct()
     {
@@ -86,12 +89,17 @@ class Krono implements Counter
         $seconds = TimeScaler::unit($time)
             ->fromNano()
             ->toSeconds();
-        $unit = TimeScaler::adjust(round($seconds->raw(), 3));
+        $unit = TimeScaler::adjust(round($seconds->raw(), $this->precision, PHP_ROUND_HALF_DOWN));
         return (string) $unit;
     }
 
     public function state(): string
     {
         return $this->state::WORDING;
+    }
+
+    public function now()
+    {
+        return Clock::systemResolution();
     }
 }
