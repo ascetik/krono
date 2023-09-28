@@ -30,13 +30,13 @@ class ReadyState implements KronoState
     public const WORDING = 'ready';
 
     public readonly float $stopTime;
-
+    
     public function __construct(
         protected Krono $krono,
         private float $startTime,
 
     ) {
-        $this->stopTime = hrtime(true);
+        $this->stopTime = $this->krono->now();
     }
 
     /**
