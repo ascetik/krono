@@ -30,16 +30,10 @@ class HighResolutionKlock implements Klock
         return hrtime(true);
     }
 
-    public function unit(float $time): TimeScaleValue
+    public function unit(float $time, int $precision): TimeScaleValue
     {
-        return TimeScaler::unit($time);
-    }
-
-    public function toSeconds(float $time): int|float
-    {
-        return $this->unit($time)
+        return TimeScaler::unit(round($time, $precision))
             ->fromNano()
-            ->toSeconds()
-            ->raw();
+            ->toSeconds();
     }
 }

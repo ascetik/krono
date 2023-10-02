@@ -26,6 +26,5 @@ use Ascetik\UnitscaleTime\Values\TimeScaleValue;
 interface Klock
 {
     public function now(): int|float;
-    public function toSeconds(float $time): int|float;
-    public function unit(float $time): TimeScaleValue;
+    public function unit(float $time, int $precision): TimeScaleValue;
 }
