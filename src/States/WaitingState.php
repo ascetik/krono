@@ -18,6 +18,7 @@ use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\Krono;
 use Ascetik\Krono\Traits\UseRunningState;
 use Ascetik\Krono\Types\KronoState;
+use Ascetik\UnitscaleTime\Values\TimeScaleValue;
 
 /**
  * Krono initial state
@@ -43,48 +44,34 @@ class WaitingState implements KronoState
     }
 
     /**
-     * Can't stop not started Krono
-     *
-     * @throws KronoException
+     * Stop time value is still 0
      */
     public function stop(): float
-    {
-        $this->throw();
-    }
-
-    /**
-     * Can't restart not started Krono
-     *
-     * @throws KronoException
-     */
-    public function restart(): float
-    {
-        $this->throw();
-    }
-
-    /**
-     * Can't cancel not started Krono
-     *
-     * @throws KronoException
-     */
-    public function cancel(): void
-    {
-        $this->throw();
-    }
-
-    /**
-     * Return Null elapsed time if Krono
-     * did not start
-     *
-     * @throws KronoException
-     */
-    public function elapsedTime(): float
     {
         return 0;
     }
 
-    private function throw()
+    /**
+     * Simply start krono
+     */
+    public function restart(): float
     {
-        throw new KronoException('not running');
+        return $this->start();
+    }
+
+    /**
+     * Nothing to cancel on waiting state
+     */
+    public function cancel(): void
+    {
+        return;
+    }
+
+    /**
+     * Return 0
+     */
+    public function elapsedTime(): float
+    {
+        return 0;
     }
 }
