@@ -4,6 +4,7 @@ namespace Ascetik\Krono\Tests;
 
 use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\Krono;
+use Ascetik\Krono\States\WaitingState;
 use PHPUnit\Framework\TestCase;
 
 class KronoWaitingTest extends TestCase
@@ -17,7 +18,7 @@ class KronoWaitingTest extends TestCase
 
     public function testKronoShouldBeWaitingToStart()
     {
-        $this->assertSame('waiting', $this->krono->state());
+        $this->assertInstanceOf(WaitingState::class, $this->krono->state());
     }
 
     public function testShouldBeAbleToStart()
@@ -25,27 +26,31 @@ class KronoWaitingTest extends TestCase
         $this->assertIsFloat($this->krono->start());
     }
 
+    public function testRestartShouldStartKrono()
+    {
+        $this->assertIsFloat($this->krono->restart());
+    }
+
     public function testShouldNotBeAbleToStop()
     {
-        $this->expectException(KronoException::class);
-        $this->krono->stop();
+        $this->assertEquals(0, $this->krono->stop());
     }
 
-    public function testShouldNotBeAbleTorestart()
+    public function testShouldNotChangeStateOnCancel()
     {
-        $this->expectException(KronoException::class);
-        $this->krono->restart();
-    }
-
-    public function testShouldNotBeAbleToCancel()
-    {
-        $this->expectException(KronoException::class);
+        $beforeState = $this->krono->state();
         $this->krono->cancel();
+        $afterState = $this->krono->state();
+        $this->assertSame($beforeState, $afterState);
     }
 
-    public function testResultShouldBeNull()
+    public function testElapsedTimeShouldBeNull()
     {
         $this->assertEquals(0, $this->krono->elapsedTime());
     }
 
+    public function testScaleValueShouldHaveZeroAsValue()
+    {
+        $this->assertSame('0s', (string) $this->krono->value());
+    }
 }
