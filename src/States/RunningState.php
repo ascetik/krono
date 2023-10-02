@@ -49,7 +49,7 @@ class RunningState implements KronoState
      */
     public function stop(): float
     {
-        $state = new ReadyState($this->krono, $this->startValue, $this->krono->now());
+        $state = new ReadyState($this->krono, $this->startValue, $this->krono->clock->now());
         $this->krono->setState($state);
         return $state->stopTime;
     }
@@ -73,6 +73,6 @@ class RunningState implements KronoState
     public function elapsedTime(): float
     {
         $this->stop();
-        return $this->krono->elapsedTime();
+        return $this->krono->state()->elapsedTime();
     }
 }

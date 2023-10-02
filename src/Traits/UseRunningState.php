@@ -28,7 +28,7 @@ trait UseRunningState
 {
     private function setRunningState(Krono $krono): float
     {
-        $state = new RunningState($krono, $krono->now());
+        $state = new RunningState($krono, $krono->clock->now());
         $krono->setState($state);
         return $state->startValue;
     }

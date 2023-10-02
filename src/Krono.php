@@ -45,7 +45,6 @@ class Krono implements Counter
 {
     private KronoState $state;
     private int $precision = 9;
-    private bool $adjust = false;
 
     public function __construct(
         public readonly Klock $clock = new HighResolutionKlock()
@@ -56,6 +55,12 @@ class Krono implements Counter
     public function setState(KronoState $state): self
     {
         $this->state = $state;
+        return $this;
+    }
+
+    public function round(int $precision): self
+    {
+        $this->precision = $precision;
         return $this;
     }
 
@@ -86,40 +91,16 @@ class Krono implements Counter
 
     public function elapsedTime(): float
     {
-        return $this->state->elapsedTime();
+        return $this->value()->raw();
     }
 
-    public function adjusted(): self
+    public function value(): TimeScaleValue
     {
-        $this->adjust = true;
-        return $this;
+        return $this->clock->unit($this->state->elapsedTime(), $this->precision);
     }
 
-    public function __toString()
+    public function state(): KronoState
     {
-        return (string) $this->unit();
-    }
-
-    public function unit(): TimeScaleValue
-    {
-        $time = round($this->elapsedTime(), $this->precision);
-        $unit = $this->clock->unit($time);
-        return $this->adjust ? $unit->adjust() : $unit;
-    }
-
-    public function state(): string
-    {
-        return $this->state::WORDING;
-    }
-
-    public function now()
-    {
-        return $this->clock->now();
-    }
-
-    public function round(int $precision): self
-    {
-        $this->precision = $precision;
-        return $this;
+        return $this->state;
     }
 }
