@@ -4,6 +4,9 @@ namespace Ascetik\Krono\Tests;
 
 use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\Krono;
+use Ascetik\Krono\States\ReadyState;
+use Ascetik\Krono\States\RunningState;
+use Ascetik\Krono\States\WaitingState;
 use PHPUnit\Framework\TestCase;
 
 class KronoRunningTest extends TestCase
@@ -18,24 +21,25 @@ class KronoRunningTest extends TestCase
 
     public function testStartedKronoShouldBeRunning()
     {
-        $this->assertSame('running',$this->krono->state());
+        $this->assertInstanceOf(RunningState::class, $this->krono->state());
     }
 
     public function testStartedKronoWontBeAffectedOnStartAgain()
     {
         $this->assertIsFloat($this->krono->start());
-        $this->assertSame('running', $this->krono->state());
+        $this->assertInstanceOf(RunningState::class, $this->krono->state());
     }
 
     public function testStartedKronoShouldBeAbleToStop()
     {
         $this->assertIsFloat($this->krono->stop());
+        $this->assertInstanceOf(ReadyState::class, $this->krono->state());
     }
 
     public function testStartedKronoShouldBeAbleToCancel()
     {
         $this->krono->cancel();
-        $this->assertSame('waiting', $this->krono->state());
+        $this->assertInstanceOf(WaitingState::class, $this->krono->state());
     }
 
     public function testStartedKronoShouldBeAbleTorestart()

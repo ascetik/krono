@@ -19,7 +19,11 @@ use Ascetik\Krono\States\WaitingState;
 use Ascetik\Krono\Types\Counter;
 use Ascetik\Krono\Types\Klock;
 use Ascetik\Krono\Types\KronoState;
+use Ascetik\UnitscaleCore\Types\ScaleDimension;
+use Ascetik\UnitscaleTime\Extensions\AdjustedTimeValue;
 use Ascetik\UnitscaleTime\Factories\TimeScaler;
+use Ascetik\UnitscaleTime\Scales\TimeScale;
+use Ascetik\UnitscaleTime\Values\TimeScaleValue;
 
 /**
  * Krono is a simple time counter.
@@ -43,7 +47,7 @@ class Krono implements Counter
     private int $precision = 9;
 
     public function __construct(
-        private Klock $clock = new HighResolutionKlock()
+        public readonly Klock $clock = new HighResolutionKlock()
     ) {
         $this->reset();
     }
@@ -51,6 +55,12 @@ class Krono implements Counter
     public function setState(KronoState $state): self
     {
         $this->state = $state;
+        return $this;
+    }
+
+    public function round(int $precision): self
+    {
+        $this->precision = $precision;
         return $this;
     }
 
@@ -81,29 +91,16 @@ class Krono implements Counter
 
     public function elapsedTime(): float
     {
-        return $this->state->elapsedTime();
+        return $this->value()->raw();
     }
 
-    public function __toString()
+    public function value(): TimeScaleValue
     {
-        $time = $this->elapsedTime();
-        $seconds = $this->clock->toSeconds($time);
-        return (string) TimeScaler::adjust(round($seconds, $this->precision));
+        return $this->clock->unit($this->state->elapsedTime(), $this->precision);
     }
 
-    public function state(): string
+    public function state(): KronoState
     {
-        return $this->state::WORDING;
-    }
-
-    public function now()
-    {
-        return $this->clock->now();
-    }
-
-    public function round(int $precision): self
-    {
-        $this->precision = $precision;
-        return $this;
+        return $this->state;
     }
 }

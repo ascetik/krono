@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Ascetik\Krono\Types;
 
+use Ascetik\UnitscaleTime\Values\TimeScaleValue;
+
 /**
  * Handle operations relative to
  * the "now" time value and its
@@ -24,5 +26,5 @@ namespace Ascetik\Krono\Types;
 interface Klock
 {
     public function now(): int|float;
-    public function toSeconds(float $time): int|float;
+    public function unit(float $time, int $precision): TimeScaleValue;
 }

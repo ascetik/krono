@@ -6,6 +6,8 @@ namespace Ascetik\Krono\Tests;
 
 use Ascetik\Krono\Krono;
 use Ascetik\Krono\States\ReadyState;
+use Ascetik\Krono\States\RunningState;
+use Ascetik\Krono\States\WaitingState;
 use PHPUnit\Framework\TestCase;
 
 class KronoReadyTest extends TestCase
@@ -24,20 +26,20 @@ class KronoReadyTest extends TestCase
 
     public function testKronoShouldBeReady()
     {
-        $this->assertSame('ready', $this->krono->state());
+        $this->assertInstanceOf(ReadyState::class, $this->krono->state());
     }
 
     public function testStartOnReadyStateShouldRelaunchKrono()
     {
         $start = $this->krono->start();
-        $this->assertSame('running', $this->krono->state());
+        $this->assertInstanceOf(RunningState::class, $this->krono->state());
         $this->assertTrue($start > $this->start);
     }
 
     public function testReStartOnReadyStateShouldDoTheSame()
     {
         $start = $this->krono->restart();
-        $this->assertSame('running', $this->krono->state());
+        $this->assertInstanceOf(RunningState::class, $this->krono->state());
         $this->assertTrue($start > $this->start);
     }
 
@@ -50,17 +52,25 @@ class KronoReadyTest extends TestCase
     public function testCancelReadyStateInitializesKrono()
     {
         $this->krono->cancel();
-        $this->assertSame('waiting', $this->krono->state());
+        $this->assertInstanceOf(WaitingState::class, $this->krono->state());
     }
 
     public function testElapsedTimeShouldBeFloat()
     {
         $this->assertIsFloat($this->krono->elapsedTime());
-        $this->assertEquals($this->stop - $this->start, $this->krono->elapsedTime());
+        $this->assertEquals(
+            round(($this->stop - $this->start) * pow(10, -9), 6),
+            $this->krono->elapsedTime()
+        );
     }
 
     public function testKronoStringOutput()
     {
-        $this->assertSame('1ms 800μs', (string) $this->krono);
+        $this->assertSame('0.0018s', (string) $this->krono->value());
+    }
+
+    public function testKronoStringAdjustedOutput()
+    {
+        $this->assertSame('1ms 800μs', (string) $this->krono->value()->adjust());
     }
 }
