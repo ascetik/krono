@@ -1,0 +1,28 @@
+{
+    "name": "ascetik/krono",
+    "description": "Simple time counter",
+    "type": "library",
+    "require": {
+        "ascetik/unitscale-time": "^0.1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.3"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ascetik\\Krono\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ascetik\\Krono\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ascetik",
+            "email": "ascetik@free.fr"
+        }
+    ]
+}
