@@ -3,7 +3,7 @@
     "description": "Simple time counter",
     "type": "library",
     "require": {
-        "ascetik/unitscale-time": "^0.1.0"
+        "ascetik/unitscale-time": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.3"
