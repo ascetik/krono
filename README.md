@@ -4,6 +4,12 @@ Simple and basic time counter.
 
 The main purpose of this counter is to get the eecution time of any task.
 
+## Release notes
+
+> Version 0.2.0
+
+- Upgraded unitscale-time package, no breaking change here.
+
 ## Basic Usage
 
 To instanciate Krono and use it simply :
@@ -109,7 +115,6 @@ See unitscale-time README file for more informations.
 
 You can restart Krono at any time :
 
-
 ```php
 
 $krono->start();
@@ -152,9 +157,9 @@ Anyway, if you have any problem, please post an issue on github.
 
 ## Next Release
 
-More Klock implementations : the only existing one is a HighResolutionKlock using system's high resolution time (hrtime). This Klock gives an instance of TImeScaleValue
-with "nano" base scale and converts it to seconds.
-I'd like to have some other implementations using :
+More Klock implementations : the only existing one is a HighResolutionKlock using system's high resolution time (hrtime).
+This Klock gives an instance of TimeScaleValue with "nano" base scale and converts it to seconds.
+I'd like to create some other implementations using :
 - DateTime
 - microtime()
 - time()
