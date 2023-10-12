@@ -14,11 +14,9 @@ declare(strict_types=1);
 
 namespace Ascetik\Krono\States;
 
-use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\Krono;
 use Ascetik\Krono\Traits\UseRunningState;
 use Ascetik\Krono\Types\KronoState;
-use Ascetik\UnitscaleTime\Values\TimeScaleValue;
 
 /**
  * Krono initial state
