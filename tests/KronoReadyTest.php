@@ -71,6 +71,6 @@ class KronoReadyTest extends TestCase
 
     public function testKronoStringAdjustedOutput()
     {
-        $this->assertSame('1ms 800μs', (string) $this->krono->value()->adjust());
+        $this->assertSame('1ms 800μs', (string) $this->krono->value()->detail());
     }
 }
