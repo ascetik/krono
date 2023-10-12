@@ -2,7 +2,6 @@
 
 namespace Ascetik\Krono\Tests;
 
-use Ascetik\Krono\Exceptions\KronoException;
 use Ascetik\Krono\Krono;
 use Ascetik\Krono\States\WaitingState;
 use PHPUnit\Framework\TestCase;

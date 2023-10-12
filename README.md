@@ -4,6 +4,12 @@ Simple and basic time counter.
 
 The main purpose of this counter is to get the eecution time of any task.
 
+## Release notes
+
+> Version 0.2.0
+
+- Upgraded unitscale-time package, no breaking change here.
+
 ## Basic Usage
 
 To instanciate Krono and use it simply :
@@ -42,7 +48,7 @@ $krono = new Krono(new AnotherAvailableKlock());
 
 Krono will use this Klock to define references and outputs.
 
-## States
+## Basic usage
 
 Krono behaviour may change along its usage.
 
@@ -91,45 +97,73 @@ When Krono has stopped, you can retrieve informations about the elapsed time bet
 
 Get raw value using _elapsedTime()_ method.
 
-You can also retrieve a **TimeScaleValue** with *value()* method and manipulate it. See unitscale-time README file for more informations.
-
+You can also retrieve a **TimeScaleValue** with *value()* method and manipulate it :
 
 ```php
 
-echo $krono->value(); // prints the elapsed time with its unit (seconds, milliseconds...).
-echo $krono->value()->adjust(); // prints the elapsed time decomposed in decreasing scales. Ex : 1s 33ms from 1033ms.
+$value = $krono->value();
+echo $value->raw(); // to print the elapsed time raw value (float, in seconds).
+echo $value; // prints elapsed time prefixed with "s". Ex: 1.234s
+echo $value->adjust(); // prints elapsed time adjusted to the highest possiblie scale. Ex : 0.3s adjusted to 300ms
+echo $value->detail(); // prints a chain of different values with succeding scales : Ex : 1.123456s giving 1s 234ms 560μs
+
+```
+See unitscale-time README file for more informations.
+
+
+## Some other commands
+
+You can restart Krono at any time :
+
+```php
+
+$krono->start();
+
+// Your code needs to restart
+
+$krono->restart();
+// and krono restarts with a new start time value.
+
+// Some code again
+
+$krono->stop();
 
 ```
 
-See *unitscale-time* package README file for more informations.
+You can cancel Krono.
+Depending on its state, krono may behave a little differently :
+
+```php
+
+$krono = new Krono(); // on waiting state
+$krono->cancel(); // nothing happens, krono is waiting for start command.
+
+$krono->start(); // started Krono, running state
+$krono->cancel(); // Krono reset, back to waiting state. Start value is lost
+
+$krono->start(); // started Krono, running state
+usleep(500);
+$krono->stop(); // Krono with ready state
+echo $krono->elapsedTime(); // prints task elapsedTime (float, seconds)
+$krono->cancel(); // Krono reset, back to waiting state, start and stop values are lost
+echo $krono->elapsedTime(); // prints 0
+
+```
+
+## Error/Exception
+
+This tool does not throw any exception to avoid any problem for the user.
+Anyway, if you have any problem, please post an issue on github.
 
 ## Next Release
 
+More Klock implementations : the only existing one is a HighResolutionKlock using system's high resolution time (hrtime).
+This Klock gives an instance of TimeScaleValue with "nano" base scale and converts it to seconds.
+I'd like to create some other implementations using :
+- DateTime
+- microtime()
+- time()
+- any other ideas ?
 
-### Klock
+Your choice would depend on the precision you need...
 
-More Klock implementations : the only existing one is a HighResolutionKlock using system's high resolution time (hrtime). This Klock gives an instance of TImeScaleValue
-with "nano" base scale and converts it to seconds.
-I'd like to have other implementations in seconds, milliseconds...
-
-### Adjusting value
-
-The only adjustment is the unitscale-time package's one, displaying detailed string value. Ex : 1s 33ms instead of 1033ms
-I'd like to be able to adjust the value with a float result concatenated to its scale. Ex : 1.033s instead of 1033ms
-
-### Krono elapsed time base value
-
-I'm still not sure about base unit conversion to seconds. I think i should use the default Klock scale, not converted to seconds.
-
-What if i'd like to have the full value of krono result and stay aware of its scale?
-Anyway, adjustment have to return the same result.
-
-## Known Issues
-
-There are still some issues with unitscale-core package used by Krono inner system time calculation.
-
-We shouldn't be able to change the returned TimeScaleValue base scale using "from" methods.
-
-We should be able to adjust time in a simple way and use decomposed string output only if needed.
-
-```

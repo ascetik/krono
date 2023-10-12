@@ -32,8 +32,7 @@ class HighResolutionKlock implements Klock
 
     public function unit(float $time, int $precision): TimeScaleValue
     {
-        return TimeScaler::unit(round($time, $precision))
-            ->fromNano()
+        return TimeScaler::fromNano(round($time, $precision))
             ->toSeconds();
     }
 }
